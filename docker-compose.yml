@@ -1,0 +1,30 @@
+version: '3.1'
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=test
+    volumes:
+      - $PWD/data:/data/db
+      - $PWD/certs:/ssl
+      - $PWD/mongo-entrypoint:/docker-entrypoint-initdb.d/
+    ports:
+      - 27017:27017
+    command:
+      - '--sslMode=preferSSL'
+      - '--sslPEMKeyFile=/ssl/mongodb.pem'
+      - '--sslCAFile=/ssl/rootCA.pem'
+      - '--bind_ip=0.0.0.0'
+      - '--auth'
+
+
+      # test connect to containers
+
+      # docker exec -it mongo-docker_mongodb_1 bash
+
+      # connect to mongodb use ssl  from container
+      # mongo -uadmin -p --host localhost --ssl --sslCAFile /ssl/rootCA.pem --sslPEMKeyFile /ssl/mongodb.pem
+
+      # connect to mongodb from host use robomongo clients or command   change --host to IP of host
